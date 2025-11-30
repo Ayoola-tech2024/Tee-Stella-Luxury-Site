@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shop - Tee Stella's Fabrics & Stitches</title>
+    <meta name="description" content="Shop luxury African fashion collections including women's wear, men's suits, ready-to-wear pieces, and premium accessories.">
+    <meta name="keywords" content="Tee Stella's Stitches, Luxury African Fashion, Ready-to-Wear Nigeria, Custom Tailoring Nigeria, Luxury Womenswear Nigeria, Luxury Menswear Nigeria">
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Cormorant+Garamond:wght@300;400;500;600&family=Poppins:wght@300;400;500;600&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
+    
+    <!-- Libraries -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/js/splide.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/css/splide.min.css" rel="stylesheet">
+    
+    <style>
+        :root {
+            --gold: #D4AF37;
+            --white: #FFFFFF;
+            --black: #000000;
+            --cream: #FDF9F4;
+            --light-gray: #F8F8F8;
+        }
+        
+        body {
+            font-family: 'Cormorant Garamond', serif;
+            background-color: var(--cream);
+            color: var(--black);
+        }
+        
+        .font-display { font-family: 'Playfair Display', serif; }
+        .font-ui { font-family: 'Poppins', sans-serif; }
+        .font-accent { font-family: 'Montserrat', sans-serif; }
+        
+        .gold-accent { color: var(--gold); }
+        .bg-gold { background-color: var(--gold); }
+        .text-gold { color: var(--gold); }
+        
+        .btn-gold {
+            background: linear-gradient(135deg, var(--gold), #B8941F);
+            transition: all 0.3s ease;
+        }
+        
+        .btn-gold:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(212, 175, 55, 0.3);
+        }
+        
+        .product-card {
+            transition: all 0.3s ease;
+            background: var(--white);
+        }
+        
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+        }
+        
+        .filter-btn {
+            transition: all 0.3s ease;
+            border: 2px solid var(--gold);
+        }
+        
+        .filter-btn.active {
+            background-color: var(--gold);
+            color: white;
+        }
+        
+        .filter-btn:not(.active):hover {
+            background-color: rgba(212, 175, 55, 0.1);
+        }
+        
+        .whatsapp-float {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 1000;
+            background: #25D366;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 20px rgba(37, 211, 102, 0.3);
+            transition: all 0.3s ease;
+        }
+        
+        .whatsapp-float:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 25px rgba(37, 211, 102, 0.4);
+        }
+        
+        .nav-link {
+            position: relative;
+            transition: color 0.3s ease;
+        }
+        
+        .nav-link:hover {
+            color: var(--gold);
+        }
+        
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -5px;
+            left: 0;
+            background-color: var(--gold);
+            transition: width 0.3s ease;
+        }
+        
+        .nav-link:hover::after {
+            width: 100%;
+        }
+        
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+            transition: all 0.6s ease;
+        }
+        
+        .stagger-delay-1 { transition-delay: 0.1s; }
+        .stagger-delay-2 { transition-delay: 0.2s; }
+        .stagger-delay-3 { transition-delay: 0.3s; }
+        .stagger-delay-4 { transition-delay: 0.4s; }
+        
+        .product-hidden {
+            display: none;
+        }
+        
+        .product-gallery {
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .gallery-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(0,0,0,0.5);
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+        
+        .gallery-nav:hover {
+            background: rgba(0,0,0,0.7);
+        }
+        
+        .gallery-nav.prev { left: 10px; }
+        .gallery-nav.next { right: 10px; }
+        
+        .gallery-images {
+            display: flex;
+            transition: transform 0.3s ease;
+        }
+        
+        .gallery-image {
+            min-width: 100%;
+            height: 300px;
+            object-fit: cover;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="fixed top-0 w-full bg-white/95 backdrop-blur-sm z-50 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <div class="font-display text-2xl font-bold gold-accent">
+                    <a href="index.html">Tee Stella's</a>
+                </div>
+                <div class="hidden md:flex space-x-8">
+                    <a href="index.html" class="nav-link font-ui text-sm font-medium">Home</a>
+                    <a href="shop.html" class="nav-link font-ui text-sm font-medium text-gold">Shop</a>
+                    <a href="bespoke.html" class="nav-link font-ui text-sm font-medium">Bespoke</a>
+                    <a href="about.html" class="nav-link font-ui text-sm font-medium">About & Contact</a>
+                </div>
+                <div class="md:hidden">
+                    <button id="mobile-menu-btn" class="text-black hover:text-gold">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white border-t">
+            <div class="px-4 py-4 space-y-4">
+                <a href="index.html" class="block font-ui text-sm font-medium hover:text-gold">Home</a>
+                <a href="shop.html" class="block font-ui text-sm font-medium text-gold">Shop</a>
+                <a href="bespoke.html" class="block font-ui text-sm font-medium hover:text-gold">Bespoke</a>
+                <a href="about.html" class="block font-ui text-sm font-medium hover:text-gold">About & Contact</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <section class="pt-32 pb-16 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center fade-in">
+                <h1 class="font-display text-4xl md:text-6xl font-bold mb-6">Luxury Collections</h1>
+                <p class="text-xl text-gray-600 max-w-2xl mx-auto">Discover our curated selection of premium African fashion, crafted with elegance and attention to detail</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Filter Section -->
+    <section class="py-8 bg-cream">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-wrap justify-center gap-4 fade-in">
+                <button class="filter-btn active font-ui font-medium px-6 py-3 rounded-lg" data-filter="all">
+                    All Collections
+                </button>
+                <button class="filter-btn font-ui font-medium px-6 py-3 rounded-lg" data-filter="women">
+                    Women's Wear
+                </button>
+                <button class="filter-btn font-ui font-medium px-6 py-3 rounded-lg" data-filter="men">
+                    Men's Fashion
+                </button>
+                <button class="filter-btn font-ui font-medium px-6 py-3 rounded-lg" data-filter="ready-to-wear">
+                    Ready-to-Wear
+                </button>
+                <button class="filter-btn font-ui font-medium px-6 py-3 rounded-lg" data-filter="accessories">
+                    Accessories
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Products Grid -->
+    <section class="py-16 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8" id="products-grid">
+                
+                <!-- Women's Wear Products -->
+                <div class="product-card rounded-lg overflow-hidden shadow-lg fade-in stagger-delay-1" data-category="women" data-name="Royal Ankara Collection" data-price="85000">
+                    <div class="product-gallery">
+                        <div class="gallery-images">
+                            <img src="resources/womens-dress-1.jpg" alt="Royal Ankara Collection" class="gallery-image">
+                            <img src="https://kimi-web-img.moonshot.cn/img/i.pinimg.com/e2a1e93369984492920e081f915ba6fcc2c6b25f.jpg" alt="Royal Ankara Collection" class="gallery-image">
+                            <img src="https://kimi-web-img.moonshot.cn/img/cdn.sellox.app/55359eaf07dced585063ed397bb810a4e0ba25b9.jpg" alt="Royal Ankara Collection" class="gallery-image">
+                        </div>
+                        <button class="gallery-nav prev">‹</button>
+                        <button class="gallery-nav next">›</button>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="font-display text-xl font-semibold mb-2">Royal Ankara Collection</h3>
+                        <p class="text-gray-600 mb-4 text-sm">Traditional African patterns meet contemporary elegance in this stunning collection featuring authentic Ankara fabric with modern silhouettes.</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-2xl font-bold text-gold">₦85,000</span>
+                            <button onclick="openWhatsApp('Royal Ankara Collection', '85000', 'resources/womens-dress-1.jpg')" class="bg-gold text-white px-4 py-2 rounded font-ui text-sm hover:bg-yellow-600 transition-colors">
+                                Order via WhatsApp
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="product-card rounded-lg overflow-hidden shadow-lg fade-in stagger-delay-2" data-category="women" data-name="Elegant Lace Gown" data-price="95000">
+                    <div class="product-gallery">
+                        <div class="gallery-images">
+                            <img src="https://kimi-web-img.moonshot.cn/img/yourluxury.africa/34c246410cc90ec7aad27ebedb34e40ebfcf97ef.webp" alt="Elegant Lace Gown" class="gallery-image">
+                            <img src="https://kimi-web-img.moonshot.cn/img/i.etsystatic.com/deae1dc18e0a074dec4f98cd91eda8eb86e82772.jpg" alt="Elegant Lace Gown" class="gallery-image">
+                        </div>
+                        <button class="gallery-nav prev">‹</button>
+                        <button class="gallery-nav next">›</button>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="font-display text-xl font-semibold mb-2">Elegant Lace Gown</h3>
+                        <p class="text-gray-600 mb-4 text-sm">Sophisticated lace gown with intricate beadwork, perfect for special occasions and evening events.</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-2xl font-bold text-gold">₦95,000</span>
+                            <button onclick="openWhatsApp('Elegant Lace Gown', '95000', 'https://kimi-web-img.moonshot.cn/img/yourluxury.africa/34c246410cc90ec7aad27ebedb34e40ebfcf97ef.webp')" class="bg-gold text-white px-4 py-2 rounded font-ui text-sm hover:bg-yellow-600 transition-colors">
+                                Order via WhatsApp
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="product-card rounded-lg overflow-hidden shadow-lg fade-in stagger-delay-3" data-category="women" data-name="Silk Boubou Set" data-price="75000">
+                    <div class="product-gallery">
+                        <div class="gallery-images">
+                            <img src="https://kimi-web-img.moonshot.cn/img/laviye.com/905857a63af4aedaf6e792172bddb0e6b0795ef7.jpg" alt="Silk Boubou Set" class="gallery-image">
+                            <img src="https://kimi-web-img.moonshot.cn/img/i.pinimg.com/5f91807fe8bef0f9c6d8d706abcb69e9f374ad8f.jpg" alt="Silk Boubou Set" class="gallery-image">
+                        </div>
+                        <button class="gallery-nav prev">‹</button>
+                        <button class="gallery-nav next">›</button>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="font-display text-xl font-semibold mb-2">Silk Boubou Set</h3>
+                        <p class="text-gray-600 mb-4 text-sm">Luxurious silk boubou with matching headwrap, featuring traditional African motifs in contemporary design.</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-2xl font-bold text-gold">₦75,000</span>
+                            <button onclick="openWhatsApp('Silk Boubou Set', '75000', 'https://kimi-web-img.moonshot.cn/img/laviye.com/905857a63af4aedaf6e792172bddb0e6b0795ef7.jpg')" class="bg-gold text-white px-4 py-2 rounded font-ui text-sm hover:bg-yellow-600 transition-colors">
+                                Order via WhatsApp
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="product-card rounded-lg overflow-hidden shadow-lg fade-in stagger-delay-1" data-category="women" data-name="Corporate Power Suit" data-price="110000">
+                    <div class="product-gallery">
+                        <div class="gallery-images">
+                            <img src="https://kimi-web-img.moonshot.cn/img/ae01.alicdn.com/a1d6b62f046d714a67a370a93ad068a046695699.jpg" alt="Corporate Power Suit" class="gallery-image">
+                            <img src="https://kimi-web-img.moonshot.cn/img/i.etsystatic.com/d795aca9e5b4e856ef089a1863af67574f1248cc.jpg" alt="Corporate Power Suit" class="gallery-image">
+                        </div>
+                        <button class="gallery-nav prev">‹</button>
+                        <button class="gallery-nav next">›</button>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="font-display text-xl font-semibold mb-2">Corporate Power Suit</h3>
+                        <p class="text-gray-600 mb-4 text-sm">Professional women's suit with African-inspired details, perfect for the modern executive.</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-2xl font-bold text-gold">₦110,000</span>
+                            <button onclick="openWhatsApp('Corporate Power Suit', '110000', 'https://kimi-web-img.moonshot.cn/img/ae01.alicdn.com/a1d6b62f046d714a67a370a93ad068a046695699.jpg')" class="bg-gold text-white px-4 py-2 rounded font-ui text-sm hover:bg-yellow-600 transition-colors">
+                                Order via WhatsApp
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Men's Fashion Products -->
+                <div class="product-card rounded-lg overflow-hidden shadow-lg fade-in stagger-delay-2" data-category="men" data-name="Executive Gold Collection" data-price="120000">
+                    <div class="product-gallery">
+                        <div class="gallery-images">
+                            <img src="resources/mens-suit-1.jpg" alt="Executive Gold Collection" class="gallery-image">
+                            <img src="https://kimi-web-img.moonshot.cn/img/img4.dhresource.com/2a433a18127ebd20a6dda44202fa987934ba7ddc.jpg" alt="Executive Gold Collection" class="gallery-image">
+                            <img src="https://kimi-web-img.moonshot.cn/img/s.alicdn.com/fbe3568e37cef6d9ce0d857f563fde046b421ddf.jpg" alt="Executive Gold Collection" class="gallery-image">
+                        </div>
+                        <button class="gallery-nav prev">‹</button>
+                        <button class="gallery-nav next">›</button>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="font-display text-xl font-semibold mb-2">Executive Gold Collection</h3>
+                        <p class="text-gray-600 mb-4 text-sm">Premium tailored suits with gold accents, crafted for the discerning gentleman who values sophistication.</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-2xl font-bold text-gold">₦120,000</span>
+                            <button onclick="openWhatsApp('Executive Gold Collection', '120000', 'resources/mens-suit-1.jpg')" class="bg-gold text-white px-4 py-2 rounded font-ui text-sm hover:bg-yellow-600 transition-colors">
+                                Order via WhatsApp
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="product-card rounded-lg overflow-hidden shadow-lg fade-in stagger-delay-3" data-category="men" data-name="Traditional Agbada Set" data-price="150000">
+                    <div class="product-gallery">
+                        <div class="gallery-images">
+                            <img src="https://kimi-web-img.moonshot.cn/img/okpankscollections.wordpress.com/7da83607e11e989ea4c15d73b0e7bb8611182cf7.jpg" alt="Traditional Agbada Set" class="gallery-image">
+                            <img src="https://kimi-web-img.moonshot.cn/img/i.pinimg.com/e2a1e93369984492920e081f915ba6fcc2c6b25f.jpg" alt="Traditional Agbada Set" class="gallery-image">
+                        </div>
+                        <button class="gallery-nav prev">‹</button>
+                        <button class="gallery-nav next">›</button>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="font-display text-xl font-semibold mb-2">Traditional Agbada Set</h3>
+                        <p class="text-gray-600 mb-4 text-sm">Majestic three-piece agbada set with intricate embroidery, perfect for traditional ceremonies and special occasions.</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-2xl font-bold text-gold">₦150,000</span>
+                            <button onclick="openWhatsApp('Traditional Agbada Set', '150000', 'https://kimi-web-img.moonshot.cn/img/okpankscollections.wordpress.com/7da83607e11e989ea4c15d73b0e7bb8611182cf7.jpg')" class="bg-gold text-white px-4 py-2 rounded font-ui text-sm hover:bg-yellow-600 transition-colors">
+                                Order via WhatsApp
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="product-card rounded-lg overflow-hidden shadow-lg fade-in stagger-delay-1" data-category="men" data-name="Casual Luxury Blazer" data-price="85000">
+                    <div class="product-gallery">
+                        <div class="gallery-images">
+                            <img src="https://kimi-web-img.moonshot.cn/img/cdn.sellox.app/55359eaf07dced585063ed397bb810a4e0ba25b9.jpg" alt="Casual Luxury Blazer" class="gallery-image">
+                            <img src="https://kimi-web-img.moonshot.cn/img/images.stockcake.com/660ecba894eb12d4afc7d22e7e809ca885d3c8ba.jpg" alt="Casual Luxury Blazer" class="gallery-image">
+                        </div>
+                        <button class="gallery-nav prev">‹</button>
+                        <button class="gallery-nav next">›</button>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="font-display text-xl font-semibold mb-2">Casual Luxury Blazer</h3>
+                        <p class="text-gray-600 mb-4 text-sm">Versatile blazer with African print accents, perfect for smart-casual occasions and weekend elegance.</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-2xl font-bold text-gold">₦85,000</span>
+                            <button onclick="openWhatsApp('Casual Luxury Blazer', '85000', 'https://kimi-web-img.moonshot.cn/img/cdn.sellox.app/55359eaf07dced585063ed397bb810a4e0ba25b9.jpg')" class="bg-gold text-white px-4 py-2 rounded font-ui text-sm hover:bg-yellow-600 transition-colors">
+                                Order via WhatsApp
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Ready-to-Wear Products -->
+                <div class="product-card rounded-lg overflow-hidden shadow-lg fade-in stagger-delay-2" data-category="ready-to-wear" data-name="Versatile Shift Dress" data-price="65000">
+                    <div class="product-gallery">
+                        <div class="gallery-images">
+                            <img src="https://kimi-web-img.moonshot.cn/img/yourluxury.africa/34c246410cc90ec7aad27ebedb34e40ebfcf97ef.webp" alt="Versatile Shift Dress" class="gallery-image">
+                            <img src="https://kimi-web-img.moonshot.cn/img/i.etsystatic.com/deae1dc18e0a074dec4f98cd91eda8eb86e82772.jpg" alt="Versatile Shift Dress" class="gallery-image">
+                        </div>
+                        <button class="gallery-nav prev">‹</button>
+                        <button class="gallery-nav next">›</button>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="font-display text-xl font-semibold mb-2">Versatile Shift Dress</h3>
+                        <p class="text-gray-600 mb-4 text-sm">Classic shift dress with African-inspired details, perfect for both office and casual wear.</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-2xl font-bold text-gold">₦65,000</span>
+                            <button onclick="openWhatsApp('Versatile Shift Dress', '65000', 'https://kimi-web-img.moonshot.cn/img/yourluxury.africa/34c246410cc90ec7aad27ebedb34e40ebfcf97ef.webp')" class="bg-gold text-white px-4 py-2 rounded font-ui text-sm hover:bg-yellow-600 transition-colors">
+                                Order via WhatsApp
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="product-card rounded-lg overflow-hidden shadow-lg fade-in stagger-delay-3" data-category="ready-to-wear" data-name="Classic White Shirt" data-price="35000">
+                    <div class="product-gallery">
+                        <div class="gallery-images">
+                            <img src="https://kimi-web-img.moonshot.cn/img/laviye.com/905857a63af4aedaf6e792172bddb0e6b0795ef7.jpg" alt="Classic White Shirt" class="gallery-image">
+                            <img src="https://kimi-web-img.moonshot.cn/img/i.pinimg.com/5f91807fe8bef0f9c6d8d706abcb69e9f374ad8f.jpg" alt="Classic White Shirt" class="gallery-image">
+                        </div>
+                        <button class="gallery-nav prev">‹</button>
+                        <button class="gallery-nav next">›</button>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="font-display text-xl font-semibold mb-2">Classic White Shirt</h3>
+                        <p class="text-gray-600 mb-4 text-sm">Essential white shirt with subtle African embroidery details, a wardrobe staple with cultural flair.</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-2xl font-bold text-gold">₦35,000</span>
+                            <button onclick="openWhatsApp('Classic White Shirt', '35000', 'https://kimi-web-img.moonshot.cn/img/laviye.com/905857a63af4aedaf6e792172bddb0e6b0795ef7.jpg')" class="bg-gold text-white px-4 py-2 rounded font-ui text-sm hover:bg-yellow-600 transition-colors">
+                                Order via WhatsApp
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="product-card rounded-lg overflow-hidden shadow-lg fade-in stagger-delay-1" data-category="ready-to-wear" data-name="Tailored Trousers" data-price="45000">
+                    <div class="product-gallery">
+                        <div class="gallery-images">
+                            <img src="https://kimi-web-img.moonshot.cn/img/ae01.alicdn.com/a1d6b62f046d714a67a370a93ad068a046695699.jpg" alt="Tailored Trousers" class="gallery-image">
+                            <img src="https://kimi-web-img.moonshot.cn/img/i.etsystatic.com/d795aca9e5b4e856ef089a1863af67574f1248cc.jpg" alt="Tailored Trousers" class="gallery-image">
+                        </div>
+                        <button class="gallery-nav prev">‹</button>
+                        <button class="gallery-nav next">›</button>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="font-display text-xl font-semibold mb-2">Tailored Trousers</h3>
+                        <p class="text-gray-600 mb-4 text-sm">Perfectly tailored trousers with African print trim, combining comfort with sophisticated style.</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-2xl font-bold text-gold">₦45,000</span>
+                            <button onclick="openWhatsApp('Tailored Trousers', '45000', 'https://kimi-web-img.moonshot.cn/img/ae01.alicdn.com/a1d6b62f046d714a67a370a93ad068a046695699.jpg')" class="bg-gold text-white px-4 py-2 rounded font-ui text-sm hover:bg-yellow-600 transition-colors">
+                                Order via WhatsApp
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Accessories Products -->
+                <div class="product-card rounded-lg overflow-hidden shadow-lg fade-in stagger-delay-2" data-category="accessories" data-name="Signature Accessories Set" data-price="45000">
+                    <div class="product-gallery">
+                        <div class="gallery-images">
+                            <img src="resources/accessories-1.jpg" alt="Signature Accessories Set" class="gallery-image">
+                            <img src="https://kimi-web-img.moonshot.cn/img/masterbundles.com/4f90f50d31925e3718c814a2b7baf39bc48d543b.jpg" alt="Signature Accessories Set" class="gallery-image">
+                            <img src="https://kimi-web-img.moonshot.cn/img/img.1miba.com/33e69f8552cc6efd02c8bbf2227e79cef1bbba1f.jpg" alt="Signature Accessories Set" class="gallery-image">
+                        </div>
+                        <button class="gallery-nav prev">‹</button>
+                        <button class="gallery-nav next">›</button>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="font-display text-xl font-semibold mb-2">Signature Accessories Set</h3>
+                        <p class="text-gray-600 mb-4 text-sm">Complete your look with our premium accessories including handbags, scarves, and jewelry pieces.</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-2xl font-bold text-gold">₦45,000</span>
+                            <button onclick="openWhatsApp('Signature Accessories Set', '45000', 'resources/accessories-1.jpg')" class="bg-gold text-white px-4 py-2 rounded font-ui text-sm hover:bg-yellow-600 transition-colors">
+                                Order via WhatsApp
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="product-card rounded-lg overflow-hidden shadow-lg fade-in stagger-delay-3" data-category="accessories" data-name="Luxury Leather Handbag" data-price="65000">
+                    <div class="product-gallery">
+                        <div class="gallery-images">
+                            <img src="https://kimi-web-img.moonshot.cn/img/www.anatoliantextures.com/f588b8f68e1aa725b962a21b906369ead7cf3983.heic" alt="Luxury Leather Handbag" class="gallery-image">
+                            <img src="https://kimi-web-img.moonshot.cn/img/alnassaj.com/a281fba5873be9ece33169c01a1bd0bc8a38b1b9.jpg" alt="Luxury Leather Handbag" class="gallery-image">
+                        </div>
+                        <button class="gallery-nav prev">‹</button>
+                        <button class="gallery-nav next">›</button>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="font-display text-xl font-semibold mb-2">Luxury Leather Handbag</h3>
+                        <p class="text-gray-600 mb-4 text-sm">Exquisite leather handbag with African-inspired hardware, the perfect statement piece for any outfit.</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-2xl font-bold text-gold">₦65,000</span>
+                            <button onclick="openWhatsApp('Luxury Leather Handbag', '65000', 'https://kimi-web-img.moonshot.cn/img/www.anatoliantextures.com/f588b8f68e1aa725b962a21b906369ead7cf3983.heic')" class="bg-gold text-white px-4 py-2 rounded font-ui text-sm hover:bg-yellow-600 transition-colors">
+                                Order via WhatsApp
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="product-card rounded-lg overflow-hidden shadow-lg fade-in stagger-delay-1" data-category="accessories" data-name="African Print Scarf" data-price="25000">
+                    <div class="product-gallery">
+                        <div class="gallery-images">
+                            <img src="https://kimi-web-img.moonshot.cn/img/img.freepik.com/321776cacaadd3f7834b3ac4b2787983180c3c46.jpg" alt="African Print Scarf" class="gallery-image">
+                            <img src="https://kimi-web-img.moonshot.cn/img/images.unsplash.com/cd47ce387c661a9f1caf2bae028da9d782fa47b0" alt="African Print Scarf" class="gallery-image">
+                        </div>
+                        <button class="gallery-nav prev">‹</button>
+                        <button class="gallery-nav next">›</button>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="font-display text-xl font-semibold mb-2">African Print Scarf</h3>
+                        <p class="text-gray-600 mb-4 text-sm">Vibrant African print scarf in premium silk, versatile styling accessory for any season.</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-2xl font-bold text-gold">₦25,000</span>
+                            <button onclick="openWhatsApp('African Print Scarf', '25000', 'https://kimi-web-img.moonshot.cn/img/img.freepik.com/321776cacaadd3f7834b3ac4b2787983180c3c46.jpg')" class="bg-gold text-white px-4 py-2 rounded font-ui text-sm hover:bg-yellow-600 transition-colors">
+                                Order via WhatsApp
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- No Results Message -->
+            <div id="no-results" class="text-center py-16 hidden">
+                <div class="text-6xl mb-4">👗</div>
+                <h3 class="font-display text-2xl font-semibold mb-4">No products found</h3>
+                <p class="text-gray-600">Try selecting a different category to see our collections.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-black text-white py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center">
+                <div class="font-display text-3xl font-bold mb-4 gold-accent">Tee Stella's Fabrics & Stitches</div>
+                <p class="text-lg mb-6">Where Luxury Meets Perfection</p>
+                
+                <div class="flex justify-center space-x-6 mb-8">
+                    <a href="#" class="text-white hover:text-gold transition-colors">
+                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12.017 0C5.396 0 .029 5.367.029 11.987c0 5.079 3.158 9.417 7.618 11.174-.105-.949-.199-2.403.041-3.439.219-.937 1.406-5.957 1.406-5.957s-.359-.72-.359-1.781c0-1.663.967-2.911 2.168-2.911 1.024 0 1.518.769 1.518 1.688 0 1.029-.653 2.567-.992 3.992-.285 1.193.6 2.165 1.775 2.165 2.128 0 3.768-2.245 3.768-5.487 0-2.861-2.063-4.869-5.008-4.869-3.41 0-5.409 2.562-5.409 5.199 0 1.033.394 2.143.889 2.741.099.12.112.225.085.345-.09.375-.293 1.199-.334 1.363-.053.225-.172.271-.402.165-1.495-.69-2.433-2.878-2.433-4.646 0-3.776 2.748-7.252 7.92-7.252 4.158 0 7.392 2.967 7.392 6.923 0 4.135-2.607 7.462-6.233 7.462-1.214 0-2.357-.629-2.75-1.378l-.748 2.853c-.271 1.043-1.002 2.35-1.492 3.146C9.57 23.812 10.763 24.009 12.017 24.009c6.624 0 11.99-5.367 11.99-11.988C24.007 5.367 18.641.001.012.001z"/>
+                        </svg>
+                    </a>
+                    <a href="#" class="text-white hover:text-gold transition-colors">
+                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"/>
+                        </svg>
+                    </a>
+                    <a href="#" class="text-white hover:text-gold transition-colors">
+                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12.017 0C5.396 0 .029 5.367.029 11.987c0 5.079 3.158 9.417 7.618 11.174-.105-.949-.199-2.403.041-3.439.219-.937 1.406-5.957 1.406-5.957s-.359-.72-.359-1.781c0-1.663.967-2.911 2.168-2.911 1.024 0 1.518.769 1.518 1.688 0 1.029-.653 2.567-.992 3.992-.285 1.193.6 2.165 1.775 2.165 2.128 0 3.768-2.245 3.768-5.487 0-2.861-2.063-4.869-5.008-4.869-3.41 0-5.409 2.562-5.409 5.199 0 1.033.394 2.143.889 2.741.099.12.112.225.085.345-.09.375-.293 1.199-.334 1.363-.053.225-.172.271-.402.165-1.495-.69-2.433-2.878-2.433-4.646 0-3.776 2.748-7.252 7.92-7.252 4.158 0 7.392 2.967 7.392 6.923 0 4.135-2.607 7.462-6.233 7.462-1.214 0-2.357-.629-2.75-1.378l-.748 2.853c-.271 1.043-1.002 2.35-1.492 3.146C9.57 23.812 10.763 24.009 12.017 24.009c6.624 0 11.99-5.367 11.99-11.988C24.007 5.367 18.641.001.012.001z"/>
+                        </svg>
+                    </a>
+                    <a href="#" class="text-white hover:text-gold transition-colors">
+                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+                        </svg>
+                    </a>
+                </div>
+                
+                <div class="border-t border-gray-700 pt-8">
+                    <p class="text-center text-gray-400 font-ui text-sm">
+                        © 2024 Tee Stella's Fabrics & Stitches. All rights reserved. | 
+                        <a href="#" class="hover:text-gold transition-colors">Privacy Policy</a> | 
+                        <a href="#" class="hover:text-gold transition-colors">Terms of Service</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- WhatsApp Float Button -->
+    <a href="https://wa.me/2347034931255" class="whatsapp-float" target="_blank">
+        <svg class="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893A11.821 11.821 0 0020.885 3.488"/>
+        </svg>
+    </a>
+
+    <script src="main.js"></script>
+</body>
+</html>
