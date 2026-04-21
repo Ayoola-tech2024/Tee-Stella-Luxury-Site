@@ -288,55 +288,6 @@ function debounce(func, wait) {
     };
 }
 
-// Add loading states and error handling
-document.addEventListener('DOMContentLoaded', function() {
-    // Add loading animation
-    const loader = document.createElement('div');
-    loader.id = 'page-loader';
-    loader.style.cssText = `
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: #FDF9F4;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        z-index: 9999;
-        transition: opacity 0.5s ease;
-    `;
-    
-    loader.innerHTML = `
-        <div style="text-align: center;">
-            <div style="width: 60px; height: 60px; border: 4px solid #D4AF37; border-top: 4px solid transparent; border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 20px;"></div>
-            <div style="font-family: 'Playfair Display', serif; font-size: 18px; color: #D4AF37;">Loading...</div>
-        </div>
-    `;
-    
-    document.body.appendChild(loader);
-    
-    // Remove loader when page is fully loaded
-    window.addEventListener('load', function() {
-        setTimeout(() => {
-            loader.style.opacity = '0';
-            setTimeout(() => {
-                loader.remove();
-            }, 500);
-        }, 1000);
-    });
-    
-    // Add CSS for spinner animation
-    const style = document.createElement('style');
-    style.textContent = `
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-    `;
-    document.head.appendChild(style);
-});
-
 // Error handling for missing elements
 function safeQuerySelector(selector, callback) {
     const element = document.querySelector(selector);
