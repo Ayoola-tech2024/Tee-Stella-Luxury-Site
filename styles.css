@@ -73,10 +73,16 @@ body {
 
 /* Hero Section */
 .hero-bg {
-    background: linear-gradient(rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0.45)), url('resources/hero-bg.jpg');
+    background: linear-gradient(rgba(12, 10, 8, 0.56), rgba(12, 10, 8, 0.62)), url('resources/hero-bg.jpg');
     background-size: cover;
-    background-position: center;
+    background-position: center top;
     background-attachment: fixed;
+}
+
+@media (max-width: 768px) {
+    .hero-bg {
+        background-attachment: scroll;
+    }
 }
 
 /* Cards */
